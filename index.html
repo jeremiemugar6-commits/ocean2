@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AquaGlass - Modern Aquatic & Marine Species Showcase</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        ocean: {
+                            deep: '#030b1e',
+                            cyan: '#06B6D4',
+                            teal: '#14B8A6',
+                            blue: '#3B82F6',
+                            purple: '#6366F1',
+                            abyss: '#020617'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 8s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+                            '50%': { transform: 'translateY(-12px) rotate(1deg)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Glass Dynamic Engine Variables */
+        :root {
+            --glass-bg: rgba(6, 182, 212, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-blur: 18px;
+            --glow-opacity: 0.65;
+        }
+
+        body {
+            background-color: #030814;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Glass Utility Classes Driven by Dynamic Variables */
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-nav {
+            background: rgba(3, 8, 20, 0.65);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .glass-btn {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(6, 182, 212, 0.5);
+            box-shadow: 0 0 25px rgba(6, 182, 212, 0.35);
+        }
+
+        .ambient-glow {
+            opacity: var(--glow-opacity);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030814;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(6, 182, 212, 0.3);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(6, 182, 212, 0.6);
+        }
+    </style>
+</head>
+<body class="relative min-h-screen selection:bg-ocean-cyan selection:text-black">
+
+    <!-- Ambient Glowing Oceanic Orbs -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div id="glow-orb-1" class="ambient-glow absolute -top-40 -left-40 w-[650px] h-[650px] bg-gradient-to-tr from-ocean-cyan via-blue-600 to-indigo-900 rounded-full filter blur-[140px] animate-pulse-slow"></div>
+        <div id="glow-orb-2" class="ambient-glow absolute top-1/3 -right-40 w-[600px] h-[600px] bg-gradient-to-br from-teal-500 via-cyan-600 to-blue-900 rounded-full filter blur-[140px] animate-pulse-slow" style="animation-delay: 2s;"></div>
+        <div id="glow-orb-3" class="ambient-glow absolute -bottom-40 left-1/3 w-[700px] h-[700px] bg-gradient-to-r from-blue-600 via-teal-600 to-ocean-cyan rounded-full filter blur-[150px] animate-pulse-slow" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Subtly Textured Caustics Grid Overlay -->
+    <div class="fixed inset-0 pointer-events-none bg-[radial-gradient(#rgba(6,182,212,0.06)_1px,transparent_1px)] [background-size:32px_32px] opacity-50 z-0"></div>
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+            <nav class="glass-nav rounded-2xl px-6 py-3.5 flex items-center justify-between shadow-2xl border border-white/10">
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-ocean-cyan via-teal-400 to-blue-600 p-0.5 shadow-lg group-hover:shadow-ocean-cyan/50 transition-all duration-300">
+                        <div class="w-full h-full bg-[#030814] rounded-[10px] flex items-center justify-center">
+                            <i data-lucide="waves" class="w-5 h-5 text-ocean-cyan group-hover:scale-110 transition-transform"></i>
+                        </div>
+                    </div>
+                    <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-slate-300">
+                        AQUAGLASS<span class="text-ocean-cyan">.</span>
+                    </span>
+                </a>
+
+                <!-- Desktop Menu Links -->
+                <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+                    <a href="#showcase" class="hover:text-ocean-cyan transition-colors duration-200">Species Explorer</a>
+                    <a href="#categories" class="hover:text-ocean-cyan transition-colors duration-200">Habitats</a>
+                    <a href="#customize" class="hover:text-ocean-cyan transition-colors duration-200 flex items-center gap-1.5">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-ocean-cyan opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-ocean-cyan"></span>
+                        </span>
+                        Glass Engine
+                    </a>
+                    <a href="#about" class="hover:text-ocean-cyan transition-colors duration-200">Conservation</a>
+                </div>
+
+                <!-- CTA & Mobile Toggle -->
+                <div class="flex items-center gap-4">
+                    <a href="#showcase" class="hidden sm:inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-ocean-cyan via-teal-500 to-blue-600 shadow-lg hover:shadow-ocean-cyan/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200">
+                        <span>Explore Aquarium</span>
+                        <i data-lucide="fish" class="w-4 h-4"></i>
+                    </a>
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-xl text-slate-300 hover:text-white glass-btn">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Dropdown Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-2 p-4 rounded-2xl glass-panel space-y-3">
+                <a href="#showcase" class="block px-4 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-all">Species Explorer</a>
+                <a href="#categories" class="block px-4 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-all">Habitats</a>
+                <a href="#customize" class="block px-4 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-all">Glass Engine</a>
+                <a href="#about" class="block px-4 py-2 rounded-xl text-slate-300 hover:bg-white/10 hover:text-white transition-all">Conservation</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="relative z-10 pt-32 lg:pt-40">
+
+        <!-- HERO SECTION -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+            <div class="text-center max-w-4xl mx-auto space-y-6">
+                <!-- Badge -->
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-panel border border-cyan-500/30 text-xs sm:text-sm font-medium text-cyan-200 shadow-xl">
+                    <span class="px-2 py-0.5 rounded-full bg-ocean-cyan/30 text-ocean-cyan font-bold text-xs">VIRTUAL AQUARIUM</span>
+                    <span class="text-slate-300">Discover Marine & Freshwater Wonders</span>
+                    <i data-lucide="sparkles" class="w-4 h-4 text-teal-300"></i>
+                </div>
+
+                <!-- Main Heading -->
+                <h1 class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.15]">
+                    Explore the Oceans with <br class="hidden sm:block"/>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-white via-cyan-100 to-slate-300">Crystal Transparent </span>
+                    <span class="bg-clip-text text-transparent bg-gradient-to-r from-ocean-cyan via-teal-300 to-blue-400">Glass Precision</span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="text-lg sm:text-xl text-slate-300 font-normal max-w-2xl mx-auto leading-relaxed">
+                    Step inside a digital glass aquarium showcase. From luminous coral reef wonders to enigmatic deep-sea dwellers, experience fish life in high-definition spatial clarity.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <a href="#showcase" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold text-white bg-gradient-to-r from-ocean-cyan via-teal-500 to-blue-600 shadow-xl shadow-ocean-cyan/25 hover:shadow-ocean-cyan/50 hover:scale-[1.03] active:scale-[0.97] transition-all duration-300 flex items-center justify-center gap-3">
+                        <i data-lucide="compass" class="w-5 h-5"></i>
+                        <span>View All Species</span>
+                    </a>
+                    <a href="#customize" class="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold text-slate-200 glass-btn flex items-center justify-center gap-3 hover:text-white">
+                        <i data-lucide="sliders" class="w-5 h-5 text-ocean-cyan"></i>
+                        <span>Adjust Glass FX</span>
+                    </a>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="pt-8 grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+                    <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-white">34,000+</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1">Known Species</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-ocean-cyan">4 Main</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1">Habitats Featured</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-teal-300">11,00m</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1">Max Depth Profile</div>
+                    </div>
+                    <div class="glass-panel p-4 rounded-2xl border border-white/10">
+                        <div class="text-2xl sm:text-3xl font-extrabold text-blue-400">100%</div>
+                        <div class="text-xs text-slate-400 font-medium mt-1">Glass Transparency</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HERO INTERACTIVE GLASS TANK DISPLAY -->
+            <div class="mt-16 relative max-w-5xl mx-auto">
+                <div class="glass-panel rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 relative z-20 overflow-hidden">
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-white/10">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+                            <span class="text-xs text-slate-300 font-mono">LIVE AQUARIUM HUD</span>
+                        </div>
+                        <div class="text-xs text-cyan-300 font-mono bg-cyan-950/60 px-3 py-1 rounded-full border border-cyan-500/30">
+                            Salinity: 35 ppt | Temp: 24°C
+                        </div>
+                    </div>
+
+                    <!-- Interactive Tank Card Highlight -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="md:col-span-2 relative h-64 sm:h-80 rounded-2xl overflow-hidden glass-panel border border-white/10 group cursor-pointer" onclick="openFishModal('clownfish')">
+                            <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=80" alt="Clownfish" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent p-6 flex flex-col justify-end">
+                                <span class="px-2.5 py-1 rounded-md text-xs font-bold bg-cyan-500/30 text-cyan-300 border border-cyan-400/30 w-fit mb-2">FEATURED REEF</span>
+                                <h3 class="text-2xl font-bold text-white">Clown Anemonefish</h3>
+                                <p class="text-xs text-slate-300 mt-1">Amphiprion ocellaris • Coral Reef Wonder</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 flex flex-col justify-between">
+                            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-4 hover:border-cyan-400/50 transition-all cursor-pointer" onclick="openFishModal('betta')">
+                                <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center text-cyan-300">
+                                    <i data-lucide="droplet" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white">Betta Splendens</div>
+                                    <div class="text-xs text-slate-400">Freshwater • Flowing Fins</div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-4 hover:border-teal-400/50 transition-all cursor-pointer" onclick="openFishModal('shark')">
+                                <div class="w-12 h-12 rounded-xl bg-teal-500/20 flex items-center justify-center text-teal-300">
+                                    <i data-lucide="shield" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white">Great White Shark</div>
+                                    <div class="text-xs text-slate-400">Cartilaginous Apex</div>
+                                </div>
+                            </div>
+
+                            <div class="glass-panel p-4 rounded-2xl border border-white/10 flex items-center gap-4 hover:border-indigo-400/50 transition-all cursor-pointer" onclick="openFishModal('angler')">
+                                <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-300">
+                                    <i data-lucide="sun" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white">Deep-Sea Anglerfish</div>
+                                    <div class="text-xs text-slate-400">Abyssal Bioluminescent</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FISH SPECIES EXPLORER WITH CATEGORY FILTER TABS -->
+        <section id="showcase" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ocean-cyan/10 border border-ocean-cyan/30 text-ocean-cyan text-xs font-semibold mb-3">
+                    <i data-lucide="search" class="w-3.5 h-3.5"></i>
+                    Interactive Explorer
+                </div>
+                <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
+                    Species Gallery
+                </h2>
+                <p class="text-slate-400 mt-3 text-base">
+                    Filter across freshwater habitats, vibrant coral reefs, cartilaginous predators, and abyssal deep-sea oddities.
+                </p>
+            </div>
+
+            <!-- Filter Buttons -->
+            <div class="flex flex-wrap justify-center gap-2 mb-10">
+                <button onclick="filterFish('all')" class="filter-btn active px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold glass-btn border border-ocean-cyan/50 text-white bg-ocean-cyan/20">All Species</button>
+                <button onclick="filterFish('freshwater')" class="filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold glass-btn text-slate-300 hover:text-white">Freshwater</button>
+                <button onclick="filterFish('reef')" class="filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold glass-btn text-slate-300 hover:text-white">Coral Reef Wonders</button>
+                <button onclick="filterFish('cartilaginous')" class="filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold glass-btn text-slate-300 hover:text-white">Cartilaginous Giants</button>
+                <button onclick="filterFish('deepsea')" class="filter-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold glass-btn text-slate-300 hover:text-white">Deep-Sea Oddities</button>
+            </div>
+
+            <!-- Fish Cards Grid -->
+            <div id="fish-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+                <!-- Fish 1: Clownfish -->
+                <div class="fish-card reef glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=800&q=80" alt="Clownfish" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/60 backdrop-blur-md text-cyan-300 border border-cyan-400/30">Coral Reef</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Clown Anemonefish</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Lives symbiotically among stinging sea anemones in warm Indo-Pacific ocean reefs.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Depth: 1 - 15m</span>
+                            <button onclick="openFishModal('clownfish')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fish 2: Betta -->
+                <div class="fish-card freshwater glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=800&q=80" alt="Betta Fish" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/60 backdrop-blur-md text-emerald-300 border border-emerald-400/30">Freshwater</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Siamese Fighting Fish (Betta)</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Famous for vibrant flowing fin displays and labyrinth breathing organs enabling shallow water survival.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Temp: 24-28°C</span>
+                            <button onclick="openFishModal('betta')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fish 3: Great White Shark -->
+                <div class="fish-card cartilaginous glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&w=800&q=80" alt="Great White Shark" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/60 backdrop-blur-md text-blue-300 border border-blue-400/30">Cartilaginous</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Great White Shark</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Apex marine predator with cartilage skeleton and electro-receptory ampullae of Lorenzini.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Length: Up to 6m</span>
+                            <button onclick="openFishModal('shark')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fish 4: Blue Tang -->
+                <div class="fish-card reef glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=800&q=80" alt="Blue Tang" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/60 backdrop-blur-md text-cyan-300 border border-cyan-400/30">Coral Reef</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Regal Blue Tang</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Vivid royal blue body with striking yellow caudal tail spine used for defensive protection.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Depth: 2 - 40m</span>
+                            <button onclick="openFishModal('bluetang')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fish 5: Manta Ray -->
+                <div class="fish-card cartilaginous glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden">
+                        <img src="https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?auto=format&fit=crop&w=800&q=80" alt="Giant Manta Ray" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/60 backdrop-blur-md text-blue-300 border border-blue-400/30">Cartilaginous</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Giant Oceanic Manta Ray</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Graceful plankton-filtering ray with a wingspan stretching up to 7 meters across open seas.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Span: Up to 7m</span>
+                            <button onclick="openFishModal('mantaray')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Fish 6: Deep Sea Anglerfish -->
+                <div class="fish-card deepsea glass-panel rounded-3xl overflow-hidden border border-white/10 hover:border-ocean-cyan/50 transition-all duration-300 group">
+                    <div class="relative h-52 overflow-hidden bg-slate-950 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=800&q=80" alt="Anglerfish" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-80">
+                        <span class="absolute top-3 right-3 px-3 py-1 rounded-full text-[11px] font-bold bg-black/80 backdrop-blur-md text-indigo-300 border border-indigo-400/30">Deep Sea</span>
+                    </div>
+                    <div class="p-6 space-y-3">
+                        <h3 class="text-xl font-bold text-white group-hover:text-ocean-cyan transition-colors">Abyssal Anglerfish</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Equipped with a glowing bioluminescent esca lure to entice prey in pitch-black ocean trenches.</p>
+                        <div class="pt-3 border-t border-white/10 flex items-center justify-between">
+                            <span class="text-xs font-mono text-slate-400">Depth: 1,000m+</span>
+                            <button onclick="openFishModal('angler')" class="px-3.5 py-1.5 rounded-lg text-xs font-semibold glass-btn text-cyan-300 hover:bg-cyan-500/20">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LIVE INTERACTIVE GLASS STUDIO / CUSTOMIZER -->
+        <section id="customize" class="py-20 relative border-y border-white/10 bg-white/[0.01]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-ocean-cyan/10 border border-ocean-cyan/30 text-ocean-cyan text-xs font-semibold mb-3">
+                        <i data-lucide="sliders" class="w-3.5 h-3.5"></i>
+                        Aquatic Glass Studio
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+                        Real-Time Glass Customizer
+                    </h2>
+                    <p class="text-slate-400 mt-3 text-base">
+                        Adjust backdrop blur, aquatic opacity, and ambient marine glow to customize your view of the underwater world.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+                    <!-- Control Sliders Box -->
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl space-y-6 border border-white/15">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="settings-2" class="w-5 h-5 text-ocean-cyan"></i>
+                            Aquarium Optics Controls
+                        </h3>
+
+                        <!-- Transparency Slider -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <label for="transparency-slider" class="text-slate-300 font-medium">Glass Opacity</label>
+                                <span id="transparency-val" class="text-ocean-cyan font-mono font-bold">5%</span>
+                            </div>
+                            <input type="range" id="transparency-slider" min="1" max="40" value="5" class="w-full accent-ocean-cyan cursor-pointer">
+                        </div>
+
+                        <!-- Blur Radius Slider -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <label for="blur-slider" class="text-slate-300 font-medium">Water Diffusion Blur</label>
+                                <span id="blur-val" class="text-teal-300 font-mono font-bold">18px</span>
+                            </div>
+                            <input type="range" id="blur-slider" min="0" max="40" value="18" class="w-full accent-teal-400 cursor-pointer">
+                        </div>
+
+                        <!-- Ambient Glow Intensity -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-sm">
+                                <label for="glow-slider" class="text-slate-300 font-medium">Ocean Glow Intensity</label>
+                                <span id="glow-val" class="text-blue-400 font-mono font-bold">65%</span>
+                            </div>
+                            <input type="range" id="glow-slider" min="10" max="100" value="65" class="w-full accent-blue-500 cursor-pointer">
+                        </div>
+
+                        <!-- Quick Theme Presets -->
+                        <div class="pt-4 border-t border-white/10">
+                            <label class="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">Aquatic Presets</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setPreset(5, 18, 65)" class="px-3 py-2 rounded-xl text-xs font-medium glass-btn hover:border-ocean-cyan">Crystal Reef</button>
+                                <button onclick="setPreset(2, 28, 90)" class="px-3 py-2 rounded-xl text-xs font-medium glass-btn hover:border-teal-400">Deep Blue</button>
+                                <button onclick="setPreset(20, 8, 30)" class="px-3 py-2 rounded-xl text-xs font-medium glass-btn hover:border-indigo-400">Abyssal</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Preview Card -->
+                    <div class="lg:col-span-2 glass-panel p-8 rounded-3xl border border-white/20 relative overflow-hidden flex flex-col justify-between min-h-[360px]">
+                        <div class="relative z-10 space-y-4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-xs text-white">
+                                <i data-lucide="eye" class="w-3.5 h-3.5 text-ocean-cyan"></i>
+                                Glass Tank Refraction Preview
+                            </div>
+                            <h3 class="text-2xl font-bold text-white">Precision Aquatic Optics</h3>
+                            <p class="text-slate-300 leading-relaxed text-sm max-w-xl">
+                                Adjusting parameters recalibrates real-time CSS filters to render liquid glass refraction across all species cards and HUD displays without sacrificing content readability.
+                            </p>
+                        </div>
+
+                        <div class="relative z-10 pt-6 flex flex-wrap gap-4 items-center justify-between border-t border-white/10">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-ocean-cyan to-teal-400 flex items-center justify-center font-bold text-black text-sm">
+                                    AQ
+                                </div>
+                                <div>
+                                    <div class="text-sm font-semibold text-white">AquaGlass Rendering Core</div>
+                                    <div class="text-xs text-slate-400">Dynamic Caustics & Optical Diffusion</div>
+                                </div>
+                            </div>
+                            <button onclick="alert('Glass styling settings saved to current session!')" class="px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 transition-all">
+                                Save Settings
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FISH DETAIL MODAL CONTAINER -->
+    <div id="fish-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="glass-panel w-full max-w-2xl rounded-3xl border border-white/20 p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="closeFishModal()" class="absolute top-4 right-4 p-2 rounded-full glass-btn text-slate-300 hover:text-white">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div id="modal-content" class="space-y-4">
+                <!-- Dynamically Populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 border-t border-white/10 bg-black/40 backdrop-blur-xl mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-ocean-cyan to-teal-400 flex items-center justify-center text-black font-bold">
+                        <i data-lucide="waves" class="w-4 h-4"></i>
+                    </div>
+                    <span class="text-lg font-bold text-white tracking-tight">AQUAGLASS.</span>
+                </div>
+                <p class="text-xs text-slate-400 text-center md:text-left">
+                    Dedicated to marine biology education, coral reef conservation, and aquatic glass design.
+                </p>
+                <div class="text-xs text-slate-500">
+                    © 2026 AquaGlass Marine Showcase.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Interactivity -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle Logic
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Dynamic Glass Engine Control Listeners
+        const transSlider = document.getElementById('transparency-slider');
+        const blurSlider = document.getElementById('blur-slider');
+        const glowSlider = document.getElementById('glow-slider');
+
+        const transVal = document.getElementById('transparency-val');
+        const blurVal = document.getElementById('blur-val');
+        const glowVal = document.getElementById('glow-val');
+
+        function updateGlassEngine() {
+            const transparency = transSlider.value;
+            const blur = blurSlider.value;
+            const glow = glowSlider.value;
+
+            transVal.innerText = transparency + '%';
+            blurVal.innerText = blur + 'px';
+            glowVal.innerText = glow + '%';
+
+            document.documentElement.style.setProperty('--glass-bg', `rgba(6, 182, 212, ${transparency / 100})`);
+            document.documentElement.style.setProperty('--glass-blur', `${blur}px`);
+            document.documentElement.style.setProperty('--glow-opacity', `${glow / 100}`);
+        }
+
+        transSlider.addEventListener('input', updateGlassEngine);
+        blurSlider.addEventListener('input', updateGlassEngine);
+        glowSlider.addEventListener('input', updateGlassEngine);
+
+        function setPreset(t, b, g) {
+            transSlider.value = t;
+            blurSlider.value = b;
+            glowSlider.value = g;
+            updateGlassEngine();
+        }
+
+        // Species Filter Logic
+        function filterFish(category) {
+            const cards = document.querySelectorAll('.fish-card');
+            const btns = document.querySelectorAll('.filter-btn');
+
+            btns.forEach(btn => {
+                btn.classList.remove('active', 'border-ocean-cyan/50', 'bg-ocean-cyan/20', 'text-white');
+                btn.classList.add('text-slate-300');
+            });
+
+            event.currentTarget.classList.add('active', 'border-ocean-cyan/50', 'bg-ocean-cyan/20', 'text-white');
+
+            cards.forEach(card => {
+                if (category === 'all' || card.classList.contains(category)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Fish Modal Data
+        const fishData = {
+            clownfish: {
+                name: "Clown Anemonefish",
+                scientific: "Amphiprion ocellaris",
+                type: "Coral Reef Wonder",
+                img: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=1000&q=80",
+                desc: "Clownfish form symbiotic relationships with sea anemones. A mucus layer protects them against anemone stingers, allowing them to nest safely among tentacles.",
+                habitat: "Shallow Indo-Pacific Coral Reefs",
+                diet: "Plankton, Algae, Small Crustaceans"
+            },
+            betta: {
+                name: "Siamese Fighting Fish",
+                scientific: "Betta splendens",
+                type: "Freshwater Favorite",
+                img: "https://images.unsplash.com/photo-1522069169874-c58ec4b76be5?auto=format&fit=crop&w=1000&q=80",
+                desc: "Bettas possess a unique organ called the labyrinth, allowing them to breathe atmospheric oxygen directly from the water surface in slow-moving streams.",
+                habitat: "Southeast Asian Freshwater Basins & Rice Paddies",
+                diet: "Insect Larvae, Zooplankton"
+            },
+            shark: {
+                name: "Great White Shark",
+                scientific: "Carcharodon carcharias",
+                type: "Cartilaginous Giant",
+                img: "https://images.unsplash.com/photo-1560275619-4662e36fa65c?auto=format&fit=crop&w=1000&q=80",
+                desc: "The world's largest predatory fish, possessing powerful muscular cartilage structures and serrated teeth to maintain marine ecological balance.",
+                habitat: "Coastal Temperate & Ocean Waters",
+                diet: "Seals, Fish, Marine Mammals"
+            },
+            bluetang: {
+                name: "Regal Blue Tang",
+                scientific: "Paracanthurus hepatus",
+                type: "Coral Reef Wonder",
+                img: "https://images.unsplash.com/photo-1535591273668-578e31182c4f?auto=format&fit=crop&w=1000&q=80",
+                desc: "Features a royal-blue body, yellow tail, and sharp scalpel-like spines near the base of the tail used for defense against reef predators.",
+                habitat: "Indo-Pacific Coral Reef Systems",
+                diet: "Algae, Plankton"
+            },
+            mantaray: {
+                name: "Giant Oceanic Manta Ray",
+                scientific: "Mobula birostris",
+                type: "Cartilaginous Giant",
+                img: "https://images.unsplash.com/photo-1544551763-77ef2d0cfc6c?auto=format&fit=crop&w=1000&q=80",
+                desc: "Giant filter-feeders that glide gracefully through open ocean currents using large triangular pectoral fins resembling wings.",
+                habitat: "Tropical & Subtropical Oceans",
+                diet: "Plankton, Fish Larvae"
+            },
+            angler: {
+                name: "Abyssal Anglerfish",
+                scientific: "Lophiiformes",
+                type: "Deep-Sea Oddity",
+                img: "https://images.unsplash.com/photo-1508873696983-2df515122519?auto=format&fit=crop&w=1000&q=80",
+                desc: "Inhabiting deep abyssal ocean zones, female anglerfish lure unsuspecting prey using a luminescent bulb filled with glowing symbiotic bacteria.",
+                habitat: "Deep Oceans (1,000 to 4,000 meters)",
+                diet: "Deep-Sea Crustaceans, Small Fish"
+            }
+        };
+
+        function openFishModal(key) {
+            const info = fishData[key];
+            if (!info) return;
+
+            const content = document.getElementById('modal-content');
+            content.innerHTML = `
+                <div class="relative h-60 rounded-2xl overflow-hidden mb-4 border border-white/10">
+                    <img src="${info.img}" alt="${info.name}" class="w-full h-full object-cover">
+                    <span class="absolute bottom-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-black/70 backdrop-blur-md text-cyan-300 border border-cyan-400/30">${info.type}</span>
+                </div>
+                <h3 class="text-2xl font-bold text-white">${info.name}</h3>
+                <p class="text-xs text-slate-400 italic">${info.scientific}</p>
+                <p class="text-sm text-slate-300 leading-relaxed">${info.desc}</p>
+                <div class="grid grid-cols-2 gap-4 pt-4 border-t border-white/10 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-semibold">Primary Habitat:</span>
+                        <span class="text-cyan-300">${info.habitat}</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block font-semibold">Dietary Profile:</span>
+                        <span class="text-teal-300">${info.diet}</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('fish-modal').classList.remove('hidden');
+        }
+
+        function closeFishModal() {
+            document.getElementById('fish-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
